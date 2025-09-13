@@ -27,7 +27,7 @@ def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
     return text.strip()
 
 # Endpoint 
-@app.post("/process-email")
+@app.post("/api/process-email")
 async def process_email(
     text: str = Form(None),
     file: UploadFile = File(None)

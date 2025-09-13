@@ -45,7 +45,7 @@ form.addEventListener('submit', async (e) => {
 
 	try {
 		const response = await fetch(
-			'http://192.168.100.175:8000/process-email',
+			'https://autou-email-classifier.vercel.app/api/process-email',
 			{
 				method: 'POST',
 				body: formData,
