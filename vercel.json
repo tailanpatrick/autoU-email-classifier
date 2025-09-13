@@ -5,7 +5,7 @@
 		{ "src": "backend/api/process_email.py", "use": "@vercel/python" }
 	],
 	"routes": [
-		{ "src": "/api/(.*)", "dest": "backend/app/main.py" },
+		{ "src": "/api/(.*)", "dest": "backend/api/process_email.py" },
 		{ "src": "/(.*)", "dest": "/frontend/$1" }
 	]
 }

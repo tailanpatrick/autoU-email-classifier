@@ -44,7 +44,7 @@ form.addEventListener('submit', async (e) => {
 	formData.append('text', emailInput.value);
 
 	try {
-		const response = await fetch('/process-email', {
+		const response = await fetch('/api/process-email', {
 			method: 'POST',
 			body: formData,
 		});
