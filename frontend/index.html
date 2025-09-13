@@ -26,8 +26,13 @@
             <div id="error" class="text-red-600 font-semibold hidden"></div>
 
             <label class="font-semibold">Upload de arquivo (.txt ou .pdf):</label>
-            <input type="file" id="fileInput" accept=".txt,.pdf"
-                class="border rounded-lg p-2 focus:ring-2 focus:ring-purple-300">
+            <div id="file-upload-container" class="flex flex-col gap-2">
+                <input type="file" id="fileInput" accept=".txt,.pdf">
+                <button id="removeBtn" type="button" class="bg-red-500 text-white px-4 py-2 rounded hidden">
+                    Remover arquivo
+                </button>
+                <span id="fileName" class="text-gray-700"></span>
+            </div>
 
             <label class="font-semibold">Ou insira o texto do email:</label>
             <textarea id="emailInput"
