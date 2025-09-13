@@ -52,7 +52,7 @@ async def process_email(
         email_text = (email_text + "\n" + file_text).strip() if email_text else file_text
 
     if not email_text:
-        raise HTTPException(status_code=400, error="Nenhum texto ou arquivo enviado.")
+        raise HTTPException(status_code=400, detail="Nenhum texto ou arquivo enviado.")
 
 
     category = model.classify_email(email_text)
