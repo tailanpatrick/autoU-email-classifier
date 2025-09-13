@@ -105,7 +105,3 @@ async def process_email(
         "categoria": category,
         "resposta": response_text
     })
-
-
-from mangum import Mangum
-handler = Mangum(app)
