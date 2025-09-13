@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
 import uvicorn
 import io
@@ -9,7 +10,15 @@ import model
 load_dotenv()
 app = FastAPI()
 
-# ---------- Extrair texto de um PDF ----------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Para produção, coloque apenas o domínio do frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Extrair texto de um PDF
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
     text = ""
     reader = PdfReader(io.BytesIO(pdf_bytes))
@@ -17,7 +26,7 @@ def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
         text += page.extract_text() or ""
     return text.strip()
 
-# ---------- Endpoint ----------
+# Endpoint 
 @app.post("/process-email")
 async def process_email(
     text: str = Form(None),
@@ -25,11 +34,10 @@ async def process_email(
 ):
     email_text = ""
 
-    # Texto do input
     if text and text.strip():
         email_text = text.strip()
 
-    # Arquivo
+
     if file:
         file_bytes = await file.read()
         file_text = ""
@@ -39,14 +47,14 @@ async def process_email(
             file_text = extract_text_from_pdf_bytes(file_bytes)
         else:
             raise HTTPException(status_code=400, detail="Formato de arquivo não suportado. Use .txt ou .pdf")
-        
-        # Junta texto + arquivo
+  
+  
         email_text = (email_text + "\n" + file_text).strip() if email_text else file_text
 
     if not email_text:
         raise HTTPException(status_code=400, detail="Nenhum texto ou arquivo enviado.")
 
-    # Chama model
+
     category = model.classify_email(email_text)
     response_text = model.generate_response(category, email_text)
 
