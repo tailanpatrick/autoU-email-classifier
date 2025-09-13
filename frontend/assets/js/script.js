@@ -5,7 +5,22 @@ const responseP = document.getElementById('response');
 const loadingDiv = document.getElementById('loading');
 const fileInput = document.getElementById('fileInput');
 const emailInput = document.getElementById('emailInput');
+const removeBtn = document.getElementById('removeBtn');
 const errorDiv = document.getElementById('error');
+
+fileInput.addEventListener('change', () => {
+	if (fileInput.files.length > 0) {
+		removeBtn.classList.remove('hidden');
+	} else {
+		removeBtn.classList.add('hidden');
+	}
+});
+
+removeBtn.addEventListener('click', () => {
+	fileInput.value = '';
+	removeBtn.classList.add('hidden');
+	showError('');
+});
 
 form.addEventListener('submit', async (e) => {
 	e.preventDefault();
@@ -19,6 +34,7 @@ form.addEventListener('submit', async (e) => {
 		const file = fileInput.files[0];
 		if (file.type !== 'application/pdf' && file.type !== 'text/plain') {
 			showError('Formato de arquivo inválido! Use .txt ou .pdf');
+
 			loadingDiv.classList.add('hidden');
 			return;
 		}
@@ -39,10 +55,7 @@ form.addEventListener('submit', async (e) => {
 		const data = await response.json();
 
 		if (!response.ok) {
-			showError(
-				data.error ||
-					'Erro ao processar o email prenencha ao menos um dos campos'
-			);
+			showError(data.detail || data.detail);
 			return;
 		}
 
@@ -50,9 +63,7 @@ form.addEventListener('submit', async (e) => {
 		animateTyping(data.resposta);
 		resultDiv.classList.remove('hidden');
 	} catch (err) {
-		showError(
-			'Erro de conexão com o servidor. Verifique se o backend está rodando.'
-		);
+		showError(err.message);
 	} finally {
 		loadingDiv.classList.add('hidden');
 	}
