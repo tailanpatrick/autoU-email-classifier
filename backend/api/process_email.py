@@ -106,11 +106,6 @@ async def process_email(
         "resposta": response_text
     })
 
-if "VERCEL" in os.environ:
-    from mangum import Mangum
-    handler = Mangum(app)
-else:
-    # local
-    import uvicorn
-    if __name__ == "__main__":
-        uvicorn.run(app, host="0.0.0.0", port=8000)
+
+from mangum import Mangum
+handler = Mangum(app)
