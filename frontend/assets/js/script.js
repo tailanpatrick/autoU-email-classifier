@@ -44,13 +44,10 @@ form.addEventListener('submit', async (e) => {
 	formData.append('text', emailInput.value);
 
 	try {
-		const response = await fetch(
-			'https://auto-u-email-classifier-git-depl-edf3c7-tailanpatricks-projects.vercel.app/api/process-email',
-			{
-				method: 'POST',
-				body: formData,
-			}
-		);
+		const response = await fetch('/api/process-email', {
+			method: 'POST',
+			body: formData,
+		});
 
 		const data = await response.json();
 
