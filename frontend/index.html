@@ -6,40 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assistente de Emails</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .typing span {
-            opacity: 0;
-            animation: fadeIn 0.03s forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #7c3aed;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="./main.css">
 </head>
 
-<body class="bg-gradient-to-r from-purple-100 to-blue-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gradient-to-r from-[#111827] to-[#1f2937] flex flex-col items-center min-h-screen">
 
-    <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-lg">
-        <h1 class="text-2xl font-bold text-center mb-4 text-purple-700">Assistente de Emails</h1>
+    <div class="w-full h-[80px] bg-white flex justify-center items-center">
+        <a href="https://www.autou.io/">
+            <img src="https://www.autou.io/_next/image?url=%2Flogo-autou.png&w=256&q=75&dpl=dpl_9ttULC3d636xLK7y74HMquevZrWY"
+                alt="logo AutoU"
+                class="w-[187px] h-[52px] hover:scale-110 transform transition-transform duration-300" />
+        </a>
+    </div>
+    <h1 class="text-2xl font-bold text-center mt-4 text-white">Assistente Classificador de Emails</h1>
+    <div class="bg-[#1f2937] shadow-xl rounded-2xl p-6 w-full max-w-lg mt-4">
+
 
         <!-- Formulário -->
         <form id="emailForm" class="flex flex-col gap-4">
@@ -52,11 +33,12 @@
 
             <label class="font-semibold">Ou insira o texto do email:</label>
             <textarea id="emailInput"
-                class="border rounded-lg p-3 w-full h-32 resize-none focus:ring-2 focus:ring-purple-300"
+                class="border rounded-lg p-3 w-full h-32 resize-none focus:ring-2 focus:ring-purple-300 text-black"
                 placeholder="Cole o email aqui..."></textarea>
 
             <!-- Botão -->
-            <button type="submit" class="bg-purple-600 text-white rounded-lg py-2 hover:bg-purple-700 transition">
+            <button
+                class="px-6 py-3 rounded-lg text-white font-medium bg-gradient-to-r from-purple-600 to-orange-500 hover:opacity-90 transition">
                 Processar Email
             </button>
         </form>
@@ -68,7 +50,7 @@
         </div>
 
         <!-- Resultado -->
-        <div id="result" class="mt-6 p-4 border-l-4 border-purple-500 bg-purple-50 rounded-lg hidden">
+        <div id="result" class="mt-6 p-4 border-l-4 border-purple-500 bg-purple-50 rounded-lg text-black hidden">
             <p class="font-semibold">Categoria:</p>
             <p id="category" class="mb-2"></p>
             <p class="font-semibold">Resposta:</p>
@@ -101,10 +83,10 @@
                     loadingDiv.classList.add("hidden");
                     return;
                 }
-                formData.append("file", file); // nome do campo correto
+                formData.append("file", file);
             }
 
-            formData.append("text", emailInput.value); // nome do campo correto
+            formData.append("text", emailInput.value);
 
             try {
                 const response = await fetch("http://localhost:8000/process-email", {
