@@ -23,6 +23,7 @@ Responda apenas com a palavra Produtivo ou Improdutivo.
     categoria = response.choices[0].message.content.strip()
     return categoria
 
+
 # Gera uma resposta automática para o email com base na categoria e texto.
 def generate_response(category: str, text: str) -> str:
     if category == "Produtivo":
@@ -30,11 +31,11 @@ def generate_response(category: str, text: str) -> str:
     else:
         prompt = f"O email: {text}\n\nFoi classificado como Improdutivo. Gere uma resposta curta e educada para o remetente."
 
-    prompt+= "a resposta deve ter no máximo 50 palavras sem cortar palavras"
-    
+    prompt += " A resposta deve ter no máximo 50 palavras, não cortar palavras, e NÃO deve incluir '[Seu nome]' em hipótese alguma."
+
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=200
+        max_tokens=250
     )
     return response.choices[0].message.content.strip()
