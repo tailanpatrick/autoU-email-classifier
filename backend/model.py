@@ -31,7 +31,7 @@ def generate_response(category: str, text: str) -> str:
     else:
         prompt = f"O email: {text}\n\nFoi classificado como Improdutivo. Gere uma resposta curta e educada para o remetente."
 
-    prompt += " A resposta deve ter no máximo 50 palavras, não cortar palavras, e NÃO deve incluir '[Seu nome]' em hipótese alguma."
+    prompt += " A resposta deve ter no máximo 50 palavras, não cortar palavras, e NÃO deve incluir '[Seu nome]' em hipótese alguma. E NÂO incluir se é PRODUTIVO OU IMPRODUTIVO"
 
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
