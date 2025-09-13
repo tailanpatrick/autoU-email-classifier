@@ -21,10 +21,8 @@
     <h1 class="text-2xl font-bold text-center mt-4 text-white">Assistente Classificador de Emails</h1>
     <div class="bg-[#1f2937] shadow-xl rounded-2xl p-6 w-full max-w-lg mt-4">
 
-
-        <!-- Formulário -->
         <form id="emailForm" class="flex flex-col gap-4">
-            <!-- Mensagem de erro -->
+
             <div id="error" class="text-red-600 font-semibold hidden"></div>
 
             <label class="font-semibold">Upload de arquivo (.txt ou .pdf):</label>
@@ -36,20 +34,18 @@
                 class="border rounded-lg p-3 w-full h-32 resize-none focus:ring-2 focus:ring-purple-300 text-black"
                 placeholder="Cole o email aqui..."></textarea>
 
-            <!-- Botão -->
             <button
                 class="px-6 py-3 rounded-lg text-white font-medium bg-gradient-to-r from-purple-600 to-orange-500 hover:opacity-90 transition">
                 Processar Email
             </button>
         </form>
 
-        <!-- Loading -->
         <div id="loading" class="mt-6 hidden">
             <div class="spinner"></div>
             <p class="text-center mt-2 text-purple-700">Processando...</p>
         </div>
 
-        <!-- Resultado -->
+
         <div id="result" class="mt-6 p-4 border-l-4 border-purple-500 bg-purple-50 rounded-lg text-black hidden">
             <p class="font-semibold">Categoria:</p>
             <p id="category" class="mb-2"></p>
@@ -58,74 +54,8 @@
         </div>
     </div>
 
-    <script>
-        const form = document.getElementById("emailForm");
-        const resultDiv = document.getElementById("result");
-        const categoryP = document.getElementById("category");
-        const responseP = document.getElementById("response");
-        const loadingDiv = document.getElementById("loading");
-        const fileInput = document.getElementById("fileInput");
-        const emailInput = document.getElementById("emailInput");
-        const errorDiv = document.getElementById("error");
+    <script src="">
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            errorDiv.classList.add("hidden");
-            resultDiv.classList.add("hidden");
-            loadingDiv.classList.remove("hidden");
-            responseP.innerHTML = "";
-
-            const formData = new FormData();
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                if (file.type !== "application/pdf" && file.type !== "text/plain") {
-                    showError("Formato de arquivo inválido! Use .txt ou .pdf");
-                    loadingDiv.classList.add("hidden");
-                    return;
-                }
-                formData.append("file", file);
-            }
-
-            formData.append("text", emailInput.value);
-
-            try {
-                const response = await fetch("http://localhost:8000/process-email", {
-                    method: "POST",
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    showError(data.error || "Erro ao processar o email prenencha ao menos um dos campos");
-                    return;
-                }
-
-                categoryP.textContent = data.categoria;
-                animateTyping(data.resposta);
-                resultDiv.classList.remove("hidden");
-
-            } catch (err) {
-                showError("Erro de conexão com o servidor. Verifique se o backend está rodando.");
-            } finally {
-                loadingDiv.classList.add("hidden");
-            }
-        });
-
-        function showError(message) {
-            errorDiv.textContent = message;
-            errorDiv.classList.remove("hidden");
-        }
-
-        function animateTyping(text) {
-            responseP.innerHTML = "";
-            text.split("").forEach((char, i) => {
-                const span = document.createElement("span");
-                span.textContent = char;
-                span.style.animationDelay = `${i * 0.03}s`;
-                responseP.appendChild(span);
-            });
-        }
     </script>
 
 
