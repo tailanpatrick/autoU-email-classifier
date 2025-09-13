@@ -4,4 +4,4 @@ PyPDF2
 openai
 python-dotenv
 python-multipart
-uvicorn
+pydantic==1.10.8
