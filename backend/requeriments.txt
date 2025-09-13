@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+mangum
 PyPDF2
 openai
 python-dotenv

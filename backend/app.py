@@ -3,9 +3,9 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
-import uvicorn
 import io
 import model
+import os
 
 load_dotenv()
 app = FastAPI()
@@ -63,5 +63,11 @@ async def process_email(
         "resposta": response_text
     })
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+if "VERCEL" in os.environ:
+    from mangum import Mangum
+    handler = Mangum(app)
+else:
+    # local
+    import uvicorn
+    if __name__ == "__main__":
+        uvicorn.run(app, host="0.0.0.0", port=8000)
