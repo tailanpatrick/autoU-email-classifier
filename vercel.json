@@ -2,11 +2,7 @@
 	"version": 2,
 	"builds": [
 		{ "src": "frontend/**/*", "use": "@vercel/static" },
-		{
-			"src": "backend/api/process_email.py",
-			"use": "@vercel/python",
-			"config": { "runtime": "python3.11" }
-		}
+		{ "src": "backend/api/process_email.py", "use": "@vercel/python" }
 	],
 	"routes": [
 		{ "src": "/api/(.*)", "dest": "backend/api/process_email.py" },
