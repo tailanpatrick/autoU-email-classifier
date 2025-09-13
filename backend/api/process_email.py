@@ -53,13 +53,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://auto-u-email-classifier.vercel.app",
-        "https://auto-u-email-classifier-n0d077zsj-tailanpatricks-projects.vercel.app",
-        "https://auto-u-email-classifier-git-depl-edf3c7-tailanpatricks-projects.vercel.app"
+        "https://auto-u-email-classifier-n0d077zsj-tailanpatricks-projects.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Extrair texto de um PDF
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
@@ -105,3 +105,5 @@ async def process_email(
         "categoria": category,
         "resposta": response_text
     })
+
+handler = app
