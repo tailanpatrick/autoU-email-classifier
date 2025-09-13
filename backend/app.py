@@ -5,8 +5,6 @@ from PyPDF2 import PdfReader
 import io
 import os
 
-from api.model import generate_response, classify_email
-
 app = FastAPI()
 
 app.add_middleware(
