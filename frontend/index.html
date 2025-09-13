@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Emails</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .typing span {
+            opacity: 0;
+            animation: fadeIn 0.03s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #7c3aed;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-purple-100 to-blue-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-lg">
+        <h1 class="text-2xl font-bold text-center mb-4 text-purple-700">Assistente de Emails</h1>
+
+        <!-- Formulário -->
+        <form id="emailForm" class="flex flex-col gap-4">
+            <!-- Mensagem de erro -->
+            <div id="error" class="text-red-600 font-semibold hidden"></div>
+
+            <label class="font-semibold">Upload de arquivo (.txt ou .pdf):</label>
+            <input type="file" id="fileInput" accept=".txt,.pdf"
+                class="border rounded-lg p-2 focus:ring-2 focus:ring-purple-300">
+
+            <label class="font-semibold">Ou insira o texto do email:</label>
+            <textarea id="emailInput"
+                class="border rounded-lg p-3 w-full h-32 resize-none focus:ring-2 focus:ring-purple-300"
+                placeholder="Cole o email aqui..."></textarea>
+
+            <!-- Botão -->
+            <button type="submit" class="bg-purple-600 text-white rounded-lg py-2 hover:bg-purple-700 transition">
+                Processar Email
+            </button>
+        </form>
+
+        <!-- Loading -->
+        <div id="loading" class="mt-6 hidden">
+            <div class="spinner"></div>
+            <p class="text-center mt-2 text-purple-700">Processando...</p>
+        </div>
+
+        <!-- Resultado -->
+        <div id="result" class="mt-6 p-4 border-l-4 border-purple-500 bg-purple-50 rounded-lg hidden">
+            <p class="font-semibold">Categoria:</p>
+            <p id="category" class="mb-2"></p>
+            <p class="font-semibold">Resposta:</p>
+            <p id="response" class="typing"></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("emailForm");
+        const resultDiv = document.getElementById("result");
+        const categoryP = document.getElementById("category");
+        const responseP = document.getElementById("response");
+        const loadingDiv = document.getElementById("loading");
+        const fileInput = document.getElementById("fileInput");
+        const emailInput = document.getElementById("emailInput");
+        const errorDiv = document.getElementById("error");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorDiv.classList.add("hidden");
+            resultDiv.classList.add("hidden");
+            loadingDiv.classList.remove("hidden");
+            responseP.innerHTML = "";
+
+            const formData = new FormData();
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (file.type !== "application/pdf" && file.type !== "text/plain") {
+                    showError("Formato de arquivo inválido! Use .txt ou .pdf");
+                    loadingDiv.classList.add("hidden");
+                    return;
+                }
+                formData.append("file", file); // nome do campo correto
+            }
+
+            formData.append("text", emailInput.value); // nome do campo correto
+
+            try {
+                const response = await fetch("http://localhost:8000/process-email", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error || "Erro ao processar o email");
+                    return;
+                }
+
+                categoryP.textContent = data.categoria;
+                animateTyping(data.resposta);
+                resultDiv.classList.remove("hidden");
+
+            } catch (err) {
+                showError("Erro de conexão com o servidor. Verifique se o backend está rodando.");
+            } finally {
+                loadingDiv.classList.add("hidden");
+            }
+        });
+
+    </script>
+
+
+
+</body>
+
+</html>
