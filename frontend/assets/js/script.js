@@ -28,10 +28,13 @@ form.addEventListener('submit', async (e) => {
 	formData.append('text', emailInput.value);
 
 	try {
-		const response = await fetch('http://localhost:8000/process-email', {
-			method: 'POST',
-			body: formData,
-		});
+		const response = await fetch(
+			'http://192.168.100.175:8000/process-email',
+			{
+				method: 'POST',
+				body: formData,
+			}
+		);
 
 		const data = await response.json();
 
