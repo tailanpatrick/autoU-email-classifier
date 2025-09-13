@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Para produção, coloque apenas o domínio do frontend
+    allow_origins=["https://auto-u-email-classifier-git-depl-edf3c7-tailanpatricks-projects.vercel.app/"],  # Para produção, coloque apenas o domínio do frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
