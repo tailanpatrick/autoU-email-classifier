@@ -115,7 +115,7 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    showError(data.error || "Erro ao processar o email");
+                    showError(data.error || "Erro ao processar o email prenencha ao menos um dos campos");
                     return;
                 }
 
