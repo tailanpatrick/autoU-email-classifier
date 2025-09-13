@@ -135,7 +135,15 @@
             errorDiv.classList.remove("hidden");
         }
 
-
+        function animateTyping(text) {
+            responseP.innerHTML = "";
+            text.split("").forEach((char, i) => {
+                const span = document.createElement("span");
+                span.textContent = char;
+                span.style.animationDelay = `${i * 0.03}s`;
+                responseP.appendChild(span);
+            });
+        }
     </script>
 
 
