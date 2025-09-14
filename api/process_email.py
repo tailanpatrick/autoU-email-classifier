@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
 import os
-from io import BytesIO
 
 # Adiciona a pasta 'api' ao path para importar 'services'
 sys.path.append(os.path.dirname(__file__))
@@ -28,24 +27,14 @@ def process_email():
             email_text = text.strip()
 
         # Pega o arquivo
-        file_bytes = None
-        file_name = None
-
-        if "file" in request.files:
-            file = request.files["file"]
+        file = request.files.get("file")
+        if file:
             file_bytes = file.read()
-            file_name = file.filename
-        elif request.data:
-            # Serverless às vezes não popula request.files
-            file_bytes = request.data
-            file_name = request.headers.get("X-Filename", "arquivo.txt")  # opcional
-
-        # Processa o arquivo
-        if file_bytes:
-            if file_name.endswith(".txt"):
+            if file.filename.endswith(".txt"):
                 file_text = file_bytes.decode("utf-8").strip()
-            elif file_name.endswith(".pdf"):
-                file_text = extract_text_from_pdf_bytes(BytesIO(file_bytes))
+            elif file.filename.endswith(".pdf"):
+                # Aqui passamos os bytes direto, sem criar BytesIO
+                file_text = extract_text_from_pdf_bytes(file_bytes)
             else:
                 return jsonify({"error": "Formato de arquivo não suportado. Use .txt ou .pdf"}), 400
 
