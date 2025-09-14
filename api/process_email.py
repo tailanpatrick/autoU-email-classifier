@@ -3,7 +3,6 @@ from flask_cors import CORS
 import sys
 import os
 
-
 sys.path.append(os.path.dirname(__file__))
 
 from services.classifier import classify_email, generate_response
@@ -20,11 +19,9 @@ def process_email():
     try:
         email_text = ""
 
-
         text = request.form.get("text")
         if text and text.strip():
             email_text = text.strip()
-
 
         file = request.files.get("file")
         if file:
@@ -32,7 +29,7 @@ def process_email():
             if file.filename.endswith(".txt"):
                 file_text = file_bytes.decode("utf-8").strip()
             elif file.filename.endswith(".pdf"):
-    
+
                 file_text = extract_text_from_pdf_bytes(file_bytes)
             else:
                 return jsonify({"error": "Formato de arquivo não suportado. Use .txt ou .pdf"}), 400
@@ -41,7 +38,6 @@ def process_email():
 
         if not email_text:
             return jsonify({"error": "Nenhum texto ou arquivo enviado."}), 400
-
 
         category = classify_email(email_text)
         response_text = generate_response(category, email_text)
