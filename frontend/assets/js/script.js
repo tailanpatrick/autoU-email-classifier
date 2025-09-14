@@ -52,7 +52,7 @@ form.addEventListener('submit', async (e) => {
 		const data = await response.json();
 
 		if (!response.ok) {
-			showError(data.detail || data.detail);
+			showError(data.error || data.error);
 			return;
 		}
 
