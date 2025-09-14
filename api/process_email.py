@@ -1,10 +1,8 @@
-# api/process_email.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
 import os
 
-# Adiciona a pasta 'api' ao path para importar 'services'
 sys.path.append(os.path.dirname(__file__))
 
 from services.classifier import classify_email, generate_response
@@ -21,19 +19,17 @@ def process_email():
     try:
         email_text = ""
 
-        # Pega o texto do form
         text = request.form.get("text")
         if text and text.strip():
             email_text = text.strip()
 
-        # Pega o arquivo
         file = request.files.get("file")
         if file:
             file_bytes = file.read()
             if file.filename.endswith(".txt"):
                 file_text = file_bytes.decode("utf-8").strip()
             elif file.filename.endswith(".pdf"):
-                # Aqui passamos os bytes direto, sem criar BytesIO
+
                 file_text = extract_text_from_pdf_bytes(file_bytes)
             else:
                 return jsonify({"error": "Formato de arquivo não suportado. Use .txt ou .pdf"}), 400
@@ -43,7 +39,6 @@ def process_email():
         if not email_text:
             return jsonify({"error": "Nenhum texto ou arquivo enviado."}), 400
 
-        # Classificação e resposta
         category = classify_email(email_text)
         response_text = generate_response(category, email_text)
 
